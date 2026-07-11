@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#00A86B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>마주해요 그린 리본 챌린지 | 온라인 트리</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%2300A86B'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' fill='white'%3E%F0%9F%8E%97%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root{
+    --green:#00A86B;
+    --green-dark:#028752;
+    --green-light:#E6F5EE;
+    --ribbon:#3E7A7B;
+    --ribbon-dark:#2C5C5D;
+    --ribbon-light:#DCEBEA;
+    --brown:#8a5a34;
+    --brown-dark:#6b431f;
+    --bg:#F6FBF8;
+    --text:#1f2a24;
+    --muted:#6f8079;
+    --card:#ffffff;
+    --radius:16px;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    background:linear-gradient(180deg,#F0F9F4 0%, var(--bg) 220px, var(--bg) 100%);
+    color:var(--text);
+    min-height:100vh;
+    padding-bottom: calc(96px + var(--safe-b));
+    -webkit-tap-highlight-color: transparent;
+  }
+  a{color:inherit;}
+  button{font-family:inherit;}
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:30;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:8px;
+    padding:12px clamp(14px,4vw,28px);
+    background:rgba(255,255,255,.92);
+    backdrop-filter:saturate(180%) blur(8px);
+    border-bottom:1px solid #E3F0E9;
+  }
+  .brand{display:flex; flex-direction:column; gap:1px; min-width:0;}
+  .wordmark{
+    display:flex; align-items:center; gap:2px;
+    font-family:'Jua','Noto Sans KR',sans-serif; font-weight:400;
+    font-size:clamp(17px,4.6vw,22px); color:var(--ribbon); line-height:1;
+  }
+  .wm-eyes{color:var(--ribbon); flex:0 0 auto;}
+  .wm-sub{display:block; font-weight:500; font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .header-actions{display:flex; align-items:center; gap:6px; flex:0 0 auto;}
+  .icon-btn{
+    width:36px;height:36px;border-radius:50%;border:none;background:var(--green-light);
+    color:var(--green-dark); font-size:16px; display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+  }
+  .icon-btn:active{transform:scale(.93);}
+
+  /* ---------- hero ---------- */
+  .hero{padding:22px clamp(14px,4vw,28px) 6px;}
+  .quote-card{
+    background:var(--green-light);
+    border:1px solid #cfeadd;
+    border-radius:var(--radius);
+    padding:16px 18px;
+    text-align:center;
+    font-family:'Gowun Dodum', 'Noto Sans KR', sans-serif;
+    color:var(--green-dark);
+    font-weight:700;
+    font-size:clamp(14px,3.8vw,17px);
+    line-height:1.5;
+  }
+  .stat-row{
+    display:flex; justify-content:center; gap:clamp(10px,4vw,22px);
+    margin-top:14px; flex-wrap:wrap;
+  }
+  .stat{
+    background:var(--card); border-radius:12px; padding:10px 18px;
+    text-align:center; min-width:88px; box-shadow:0 2px 10px rgba(20,60,40,.06);
+  }
+  .stat .num{font-size:20px; font-weight:900; color:var(--green-dark);}
+  .stat .lb{font-size:11px; color:var(--muted); margin-top:2px;}
+
+  /* ---------- how-to ---------- */
+  .howto{
+    display:flex; gap:10px; overflow-x:auto; padding:16px clamp(14px,4vw,28px) 4px;
+    scrollbar-width:none;
+  }
+  .howto::-webkit-scrollbar{display:none;}
+  .howto .step{
+    flex:0 0 auto; width:150px; background:var(--card); border-radius:14px; padding:14px;
+    box-shadow:0 2px 10px rgba(20,60,40,.05); font-size:12.5px; color:var(--muted); line-height:1.5;
+  }
+  .howto .step .em{font-size:20px; display:block; margin-bottom:6px;}
+  .howto .step b{color:var(--text); display:block; font-size:13px; margin-bottom:2px;}
+
+  /* ---------- forest ---------- */
+  .forest-section{padding:18px 0 6px;}
+  .forest-section h2{
+    font-size:14px; font-weight:700; color:var(--muted);
+    padding:0 clamp(14px,4vw,28px); margin:0 0 10px;
+  }
+  #forestWrap{
+    display:flex; align-items:flex-end; gap:14px;
+    overflow-x:auto; padding:10px clamp(14px,4vw,28px) 30px;
+    scroll-snap-type:x proximity;
+  }
+  .tree{
+    position:relative; flex:0 0 auto;
+    width:clamp(250px,66vw,390px); height:360px;
+    scroll-snap-align:center;
+  }
+  .tree .tree-label{
+    position:absolute; bottom:-24px; left:0; right:0; text-align:center;
+    font-size:12px; color:var(--muted); font-weight:500;
+  }
+  .tree .shadow{
+    position:absolute; bottom:2px; left:50%; transform:translateX(-50%);
+    width:56%; height:15px; border-radius:50%;
+    background:radial-gradient(ellipse at center, rgba(15,40,25,.24), rgba(15,40,25,0) 72%);
+  }
+  .tree .grass{
+    position:absolute; bottom:4px; width:20px; height:15px;
+    background:linear-gradient(180deg,#7ecb6e,#4a9a4f); border-radius:60% 60% 0 0; z-index:1;
+  }
+  .grass1{ left:35%; transform:rotate(-8deg); }
+  .grass2{ left:47%; height:18px; }
+  .grass3{ left:58%; transform:rotate(10deg); }
+  .tree .trunkwrap{
+    position:absolute; bottom:6px; left:50%; transform:translateX(-50%);
+    width:100px; height:180px; z-index:2;
+  }
+  .tree .trunkwrap svg{ width:100%; height:100%; display:block; overflow:visible; }
+  .tree .canopy{
+    position:absolute; left:0; right:0; top:0; bottom:58px; z-index:3;
+  }
+  .tree .canopy svg{ width:100%; height:100%; display:block; overflow:visible; }
+
+  .ribbon{
+    position:absolute; transform:translate(-50%,-50%);
+    width:30px; height:35px; color:var(--ribbon);
+    cursor:pointer; z-index:5;
+    filter:drop-shadow(0 3px 4px rgba(10,40,25,.35));
+    animation:pop .32s ease;
+  }
+  .ribbon svg{ width:100%; height:100%; display:block; overflow:visible; }
+  .ghost{
+    position:absolute; transform:translate(-50%,-50%);
+    width:30px; height:30px; border-radius:50%;
+    border:2px dashed var(--ribbon-light); display:flex; align-items:center; justify-content:center;
+    color:var(--ribbon); font-size:15px; cursor:pointer; z-index:4;
+  }
+  .ghost:active{background:var(--ribbon-light);}
+  @keyframes pop{ from{opacity:0; transform:translate(-50%,-50%) scale(.4);} to{opacity:1; transform:translate(-50%,-50%) scale(1);} }
+
+  .pending{
+    position:absolute; transform:translate(-50%,-50%);
+    width:44px;height:20px;border-radius:10px;background:var(--ribbon-light);
+    animation:blink 1s infinite ease-in-out; z-index:6;
+  }
+  @keyframes blink{ 0%,100%{opacity:.4;} 50%{opacity:1;} }
+
+  .mode-banner{
+    margin:0 clamp(14px,4vw,28px) 0; padding:9px 12px; border-radius:10px;
+    background:#FFF6E5; color:#8a6b1f; font-size:12px; display:flex; align-items:center; gap:8px;
+  }
+  .mode-banner button{background:none;border:none; text-decoration:underline; color:#8a6b1f; font-size:12px; cursor:pointer; padding:0;}
+
+  /* ---------- footer ---------- */
+  footer{
+    padding:26px clamp(14px,4vw,28px) 10px; text-align:center; color:var(--muted); font-size:11.5px;
+  }
+  footer .slogan{color:var(--green-dark); font-weight:700; margin-bottom:6px; font-size:13px;}
+
+  /* ---------- FAB ---------- */
+  .fab{
+    position:fixed; right:18px; bottom:calc(18px + var(--safe-b)); z-index:40;
+    background:var(--green); color:#fff; border:none; border-radius:999px;
+    padding:14px 20px; font-weight:800; font-size:14px;
+    box-shadow:0 8px 20px rgba(0,168,107,.4); cursor:pointer;
+    display:flex; align-items:center; gap:6px;
+  }
+  .fab:active{transform:scale(.96);}
+  .fab2{
+    position:fixed; left:18px; bottom:calc(18px + var(--safe-b)); z-index:40;
+    background:#fff; color:var(--green-dark); border:1px solid #cfeadd; border-radius:999px;
+    padding:12px 16px; font-weight:700; font-size:13px; box-shadow:0 4px 14px rgba(20,60,40,.12);
+    cursor:pointer;
+  }
+
+  /* ---------- overlay / sheet ---------- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(15,30,22,.45); z-index:100;
+    display:flex; align-items:flex-end; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .2s ease;
+  }
+  .overlay.show{opacity:1; pointer-events:auto;}
+  .sheet{
+    background:#fff; width:100%; max-width:480px; border-radius:20px 20px 0 0;
+    padding:20px 20px calc(20px + var(--safe-b));
+    transform:translateY(100%); transition:transform .25s cubic-bezier(.22,1,.36,1);
+    max-height:82vh; overflow-y:auto;
+  }
+  .overlay.show .sheet{transform:translateY(0);}
+  @media (min-width:640px){
+    .overlay{align-items:center;}
+    .sheet{border-radius:20px; transform:translateY(24px) scale(.98);}
+  }
+  .sheet h3{margin:0 0 4px; font-size:17px;}
+  .sheet .sub{color:var(--muted); font-size:12.5px; margin:0 0 16px;}
+  .sheet-handle{width:40px;height:4px;background:#e3e3e3;border-radius:2px;margin:0 auto 14px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:12.5px; font-weight:700; margin-bottom:6px; color:var(--text);}
+  .field textarea, .field input[type=text]{
+    width:100%; border:1.5px solid #e0eae4; border-radius:10px; padding:11px 12px;
+    font-size:14px; font-family:inherit; resize:none; background:#FAFDFB;
+  }
+  .field textarea:focus, .field input:focus{outline:none; border-color:var(--green);}
+  .charcount{text-align:right; font-size:11px; color:var(--muted); margin-top:4px;}
+  .btn-row{display:flex; gap:8px; margin-top:6px;}
+  .btn{
+    flex:1; border:none; border-radius:10px; padding:13px; font-weight:800; font-size:14px; cursor:pointer;
+  }
+  .btn-primary{background:var(--green); color:#fff;}
+  .btn-ghost{background:#F1F5F3; color:var(--text);}
+  .btn:disabled{opacity:.5;}
+
+  .detail-msg{
+    background:var(--green-light); border-radius:12px; padding:16px; font-size:15px; line-height:1.6;
+    color:var(--text); margin-bottom:10px; white-space:pre-wrap; word-break:break-word;
+  }
+  .detail-meta{font-size:12px; color:var(--muted);}
+
+  details.admin{margin-top:18px; border-top:1px dashed #e3e3e3; padding-top:12px;}
+  details.admin summary{cursor:pointer; font-size:12px; color:var(--muted); font-weight:600;}
+  .code-box{
+    background:#0f1c16; color:#c9f5df; font-size:11px; padding:12px; border-radius:10px;
+    overflow-x:auto; white-space:pre; margin:8px 0; line-height:1.5;
+  }
+  .steps{font-size:12px; color:var(--text); line-height:1.7; padding-left:18px; margin:8px 0;}
+  .small-btn{
+    font-size:11.5px; padding:6px 10px; border-radius:8px; border:1px solid #d8e6de; background:#fff; cursor:pointer; color:var(--green-dark); font-weight:700;
+  }
+
+  .toast{
+    position:fixed; left:50%; bottom:calc(90px + var(--safe-b)); transform:translateX(-50%) translateY(20px);
+    background:#1f2a24; color:#fff; padding:10px 16px; border-radius:20px; font-size:12.5px;
+    z-index:200; opacity:0; transition:all .25s ease; pointer-events:none; max-width:86vw; text-align:center;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  .share-modal .em{font-size:38px; text-align:center; display:block; margin-bottom:8px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="wordmark" aria-label="마주해요">
+      <span class="wm-text">마주</span>
+      <svg class="wm-eyes" viewBox="0 0 120 60" width="38" height="19" aria-hidden="true">
+        <circle cx="28" cy="30" r="24" fill="none" stroke="currentColor" stroke-width="6"/>
+        <circle cx="92" cy="30" r="24" fill="none" stroke="currentColor" stroke-width="6"/>
+        <ellipse cx="20" cy="27" rx="2.6" ry="4.2" fill="currentColor"/>
+        <ellipse cx="36" cy="27" rx="2.6" ry="4.2" fill="currentColor"/>
+        <ellipse cx="84" cy="27" rx="2.6" ry="4.2" fill="currentColor"/>
+        <ellipse cx="100" cy="27" rx="2.6" ry="4.2" fill="currentColor"/>
+        <path d="M8,34 C16,50 40,50 48,34 C56,20 64,20 72,34 C80,50 104,50 112,34" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+      </svg>
+      <span class="wm-text">해요</span>
+    </div>
+    <small class="wm-sub">그린 리본 챌린지 · 온라인 트리</small>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" id="refreshBtn" title="새로고침">⟳</button>
+    <button class="icon-btn" id="settingsBtn" title="설정" style="display:none;">⚙️</button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="quote-card">“한 사람의 마음은 작은 리본이지만,<br>함께하면 숲이 됩니다.”</div>
+  <div class="stat-row">
+    <div class="stat"><div class="num" id="statRibbons">0</div><div class="lb">달린 리본</div></div>
+    <div class="stat"><div class="num" id="statTrees">1</div><div class="lb">완성된 나무</div></div>
+    <div class="stat"><div class="num" id="statProgress">0%</div><div class="lb">자라는 중</div></div>
+  </div>
+</div>
+
+<div class="howto">
+  <div class="step"><span class="em">💚</span><b>① 마음을 적어요</b>고민, 응원, 하고 싶은 말을 짧게 적어보세요.</div>
+  <div class="step"><span class="em">🎗️</span><b>② 리본을 달아요</b>내 리본이 나무 위에 매달려요. 리본이 모이면 숲이 됩니다.</div>
+  <div class="step"><span class="em">🤝</span><b>③ 다음 사람에게 공유해요</b>친구, 지부, 학교에 공유해 릴레이로 이어가요.</div>
+</div>
+
+<div id="modeBanner" class="mode-banner" style="display:none;">
+  ⚠️ 지금은 이 기기에서만 리본이 보여요.
+  <button id="bannerSettingsBtn">모든 기기와 공유하려면 설정하기</button>
+</div>
+
+<div class="forest-section">
+  <h2 id="forestTitle">우리들의 숲</h2>
+  <div id="forestWrap"></div>
+</div>
+
+<footer>
+  <div class="slogan">한 사람의 마음은 작은 리본이지만, 함께하면 숲이 됩니다.</div>
+  나무를 직접 만들고 싶다면 오프라인 리본(#00A86B)과 나뭇가지를 준비해 같은 방식으로 참여할 수 있어요.
+</footer>
+
+<button class="fab2" id="exportBtn">🖼️ 이미지 저장</button>
+<button class="fab" id="addBtn">🎗️ 리본 달기</button>
+
+<!-- 리본 작성 -->
+<div class="overlay" id="formOverlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <h3>리본에 마음을 담아보세요</h3>
+    <p class="sub">고민, 응원, 하고 싶은 말 무엇이든 괜찮아요.</p>
+    <form id="ribbonForm">
+      <div class="field">
+        <label>메시지</label>
+        <textarea id="msgInput" rows="3" maxlength="60" placeholder="예) 요즘 조금 지쳐있었는데, 오늘은 나 자신에게 잘하고 있다고 말해주고 싶어요." required></textarea>
+        <div class="charcount"><span id="msgCount">0</span>/60</div>
+      </div>
+      <div class="field">
+        <label>이름 또는 닉네임 (선택)</label>
+        <input type="text" id="nameInput" maxlength="12">
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-ghost" id="formCancel">닫기</button>
+        <button type="submit" class="btn btn-primary">리본 달기</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 리본 상세 -->
+<div class="overlay" id="detailOverlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="detail-msg" id="detailMsg"></div>
+    <div class="detail-meta" id="detailMeta"></div>
+    <div class="btn-row" style="margin-top:16px;">
+      <button type="button" class="btn btn-ghost" id="detailClose">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 공유 유도 -->
+<div class="overlay" id="shareOverlay">
+  <div class="sheet share-modal">
+    <div class="sheet-handle"></div>
+    <span class="em">🌳</span>
+    <h3 style="text-align:center;">리본을 달았어요!</h3>
+    <p class="sub" style="text-align:center;">이제 다음 사람에게도 마주해요를 전해주세요.</p>
+    <div class="btn-row">
+      <button type="button" class="btn btn-ghost" id="shareClose">닫기</button>
+      <button type="button" class="btn btn-primary" id="shareBtn">다음 사람 지목하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 설정 -->
+<div class="overlay" id="settingsOverlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <h3>공유 설정</h3>
+    <p class="sub">아래 주소를 등록하면 모든 기기가 같은 트리를 함께 보게 돼요. 비워두면 이 기기에만 저장돼요.</p>
+    <div class="field">
+      <label>공유 백엔드 주소 (Google Apps Script Web App URL)</label>
+      <input type="text" id="apiUrlInput" placeholder="https://script.google.com/macros/s/xxxx/exec">
+    </div>
+    <div class="btn-row">
+      <button type="button" class="btn btn-ghost" id="apiUrlClear">공유 끄기</button>
+      <button type="button" class="btn btn-primary" id="apiUrlSave">저장</button>
+    </div>
+
+    <details class="admin">
+      <summary>🔧 아직 주소가 없다면? 5분만에 무료로 만드는 방법</summary>
+      <ol class="steps">
+        <li>구글 스프레드시트를 새로 만들고, 1행에 <b>id, message, name, ts</b> 를 순서대로 적습니다.</li>
+        <li>상단 메뉴 <b>확장 프로그램 → Apps Script</b>를 클릭합니다.</li>
+        <li>기본 코드를 모두 지우고 아래 코드를 붙여넣습니다.</li>
+        <li>저장 후 <b>배포 → 새 배포</b>를 클릭, 유형은 <b>웹 앱</b>을 선택합니다.</li>
+        <li>실행 계정 <b>나</b>, 액세스 권한 <b>모든 사용자</b>로 설정 후 배포합니다.</li>
+        <li>발급된 URL을 복사해 위 입력창에 붙여넣고 저장하세요.</li>
+      </ol>
+      <div class="code-box" id="scriptCode">function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var rows = sheet.getDataRange().getValues();
+  var out = [];
+  for (var i = 1; i < rows.length; i++) {
+    if (!rows[i][0]) continue;
+    out.push({ id: rows[i][0], message: rows[i][1], name: rows[i][2], ts: rows[i][3] });
+  }
+  return ContentService.createTextOutput(JSON.stringify(out))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var body = JSON.parse(e.postData.contents);
+  var id = Utilities.getUuid();
+  var ts = new Date().toISOString();
+  sheet.appendRow([
+    id,
+    String(body.message || '').substring(0, 200),
+    String(body.name || '').substring(0, 30),
+    ts
+  ]);
+  return ContentService.createTextOutput(JSON.stringify({ ok: true, id: id }))
+    .setMimeType(ContentService.MimeType.JSON);
+}</div>
+      <button type="button" class="small-btn" id="copyCodeBtn">코드 복사</button>
+    </details>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var CONFIG = {
+    TREE_CAPACITY: 18,
+    SLOGAN: "한 사람의 마음은 작은 리본이지만, 함께하면 숲이 됩니다.",
+    KEY_RIBBONS: "facingyou_ribbons_v1",
+    KEY_API: "facingyou_api_url",
+    POLL_MS: 20000,
+    // 모든 방문자가 별도 설정 없이 바로 같은 트리를 보도록 기본 공유 백엔드 주소를 지정.
+    // 비우면(""로 두면) 처음 방문자는 "이 기기에만 저장" 모드로 시작한다.
+    DEFAULT_API_URL: "https://script.google.com/macros/s/AKfycbyr7ZlCAJEW627qNXviL0-dGBeonyVoqS4T9NL1HsIDU0GN_eJZP6KLITAdvOvi9EBc8A/exec"
+  };
+
+  var els = {};
+  ["forestWrap","forestTitle","statRibbons","statTrees","statProgress","modeBanner",
+   "formOverlay","ribbonForm","msgInput","nameInput","msgCount","formCancel",
+   "detailOverlay","detailMsg","detailMeta","detailClose",
+   "shareOverlay","shareClose","shareBtn",
+   "settingsOverlay","apiUrlInput","apiUrlSave","apiUrlClear","copyCodeBtn","scriptCode",
+   "addBtn","exportBtn","settingsBtn","bannerSettingsBtn","refreshBtn","toast"
+  ].forEach(function(id){ els[id] = document.getElementById(id); });
+
+  // localStorage에 값이 아예 없으면(=한 번도 설정을 건드리지 않은 첫 방문) 기본 공유 주소를 사용.
+  // "공유 끄기"로 명시적으로 끈 경우(빈 문자열 저장)에는 그 상태를 그대로 존중한다.
+  var storedApiUrl = localStorage.getItem(CONFIG.KEY_API);
+  var state = {
+    ribbons: [],
+    apiUrl: (storedApiUrl === null) ? CONFIG.DEFAULT_API_URL : storedApiUrl,
+    lastPendingSlot: null
+  };
+
+  function uid(){
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "id-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+  }
+
+  function toast(msg, ms){
+    els.toast.textContent = msg;
+    els.toast.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function(){ els.toast.classList.remove("show"); }, ms || 2200);
+  }
+
+  function openOverlay(el){ el.classList.add("show"); }
+  function closeOverlay(el){ el.classList.remove("show"); }
+
+  // ---------- storage ----------
+  function loadLocal(){
+    try{
+      var raw = localStorage.getItem(CONFIG.KEY_RIBBONS);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){ return []; }
+  }
+  function saveLocal(list){
+    try{ localStorage.setItem(CONFIG.KEY_RIBBONS, JSON.stringify(list)); }catch(e){}
+  }
+
+  function isShared(){ return !!state.apiUrl; }
+
+  function fetchRemote(){
+    return fetch(state.apiUrl, { method: "GET" })
+      .then(function(r){ if(!r.ok) throw new Error("bad status"); return r.json(); })
+      .then(function(list){
+        if(!Array.isArray(list)) throw new Error("bad payload");
+        return list.map(function(r){
+          return {
+            id: r.id || uid(),
+            message: String(r.message || ""),
+            name: String(r.name || ""),
+            ts: r.ts ? new Date(r.ts).getTime() : Date.now()
+          };
+        }).sort(function(a,b){ return a.ts - b.ts; });
+      });
+  }
+
+  function postRemote(ribbon){
+    return fetch(state.apiUrl, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ message: ribbon.message, name: ribbon.name })
+    }).catch(function(){ /* no-cors: 응답을 읽을 수 없어도 정상 */ });
+  }
+
+  // ---------- 일정한 간격의 캐노피 레이아웃 ----------
+  // 캐노피 SVG(viewBox 0 0 240 260)에 실제로 그려지는 원들과 동일한 좌표.
+  // 리본이 이 잎 덩어리 안쪽에, 겹치지 않고 고르게 퍼지도록 슬롯을 미리 계산해둔다.
+  var CANOPY_VB = { w: 240, h: 260 };
+  var CANOPY_CIRCLES = [
+    { cx: 120, cy: 140, r: 92 }, // 안쪽 중심(가장 넓음)
+    { cx: 120, cy: 76,  r: 64 }, // 위쪽 밝은 부분
+    { cx: 58,  cy: 158, r: 54 }, // 왼쪽
+    { cx: 182, cy: 156, r: 54 }, // 오른쪽
+    { cx: 32,  cy: 178, r: 26 }, // 왼쪽 끝
+    { cx: 206, cy: 176, r: 26 }  // 오른쪽 끝
+  ];
+  var GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5)); // ~137.5도, 해바라기 씨 배열 각도
+
+  // 원 면적 비례로 total개를 각 원에 정수로 분배 (최대잔여법)
+  function apportion(weights, total){
+    var sum = weights.reduce(function(a,b){ return a+b; }, 0);
+    var raw = weights.map(function(w){ return total * w / sum; });
+    var floors = raw.map(Math.floor);
+    var used = floors.reduce(function(a,b){ return a+b; }, 0);
+    var remainder = total - used;
+    var order = raw.map(function(v,i){ return { i: i, frac: v - floors[i] }; })
+                    .sort(function(a,b){ return b.frac - a.frac; });
+    for (var k = 0; k < remainder; k++){ floors[order[k % order.length].i]++; }
+    return floors;
+  }
+
+  // 원 하나 안에 n개의 점을 해바라기 나선 방식으로 고르게 배치 (겹침/쏠림 없이 균일)
+  function sunflowerPoints(c, n){
+    var pts = [];
+    for (var i = 0; i < n; i++){
+      var r = n <= 1 ? 0 : c.r * 0.82 * Math.sqrt((i + 0.5) / n);
+      var theta = i * GOLDEN_ANGLE;
+      pts.push({ x: c.cx + Math.cos(theta) * r, y: c.cy + Math.sin(theta) * r });
+    }
+    return pts;
+  }
+
+  function buildCanopySlots(total){
+    var counts = apportion(CANOPY_CIRCLES.map(function(c){ return c.r * c.r; }), total);
+    var perCircle = CANOPY_CIRCLES.map(function(c, i){ return sunflowerPoints(c, counts[i]); });
+    var slots = [];
+    var maxCount = Math.max.apply(null, counts);
+    for (var k = 0; k < maxCount; k++){
+      for (var ci = 0; ci < perCircle.length; ci++){
+        if (perCircle[ci][k]) slots.push(perCircle[ci][k]);
+      }
+    }
+    return slots;
+  }
+
+  var CANOPY_SLOTS = buildCanopySlots(CONFIG.TREE_CAPACITY);
+
+  // 🎗️ 어웨어니스 리본 모양 아이콘 (고리 + 끝이 갈라진 두 가닥)
+  var RIBBON_ICON_SVG =
+    '<svg viewBox="0 0 60 70">' +
+    '<path d="M30,10 C16,2 2,10 6,22 C9,31 22,33 30,24 C38,33 51,31 54,22 C58,10 44,2 30,10 Z" fill="currentColor"/>' +
+    '<path d="M24,22 L8,62 L18,56 L24,64 L30,24 Z" fill="currentColor"/>' +
+    '<path d="M36,22 L52,62 L42,56 L36,64 L30,24 Z" fill="currentColor"/>' +
+    '</svg>';
+
+  function slotPosition(treeIndex, slotIndex){
+    var p = CANOPY_SLOTS[slotIndex % CANOPY_SLOTS.length];
+    var x = (p.x / CANOPY_VB.w) * 100;
+    var y = (p.y / CANOPY_VB.h) * 100;
+    var rot = (slotIndex % 2 === 0 ? 1 : -1) * (3 + (slotIndex % 3) * 2);
+    x = Math.max(2, Math.min(98, x));
+    y = Math.max(2, Math.min(98, y));
+    return { left: x, top: y, rot: rot };
+  }
+
+  // ---------- render ----------
+  function render(){
+    var ribbons = state.ribbons;
+    var cap = CONFIG.TREE_CAPACITY;
+    var treesCount = Math.max(1, Math.ceil(ribbons.length / cap));
+
+    els.forestWrap.innerHTML = "";
+
+    for (var i = 0; i < treesCount; i++){
+      var filled = Math.max(0, Math.min(cap, ribbons.length - cap * i));
+      var treeEl = document.createElement("div");
+      treeEl.className = "tree";
+      var bark = "tgBark" + i;
+      var cBack = "cgBack" + i, cMid = "cgMid" + i, cTop = "cgTop" + i;
+
+      var trunkSvg =
+        '<svg viewBox="0 0 100 180" preserveAspectRatio="xMidYMid meet">' +
+        '<defs><linearGradient id="' + bark + '" x1="0%" y1="0%" x2="100%" y2="0%">' +
+        '<stop offset="0%" stop-color="#5c3a1c"/><stop offset="30%" stop-color="#8a5a34"/>' +
+        '<stop offset="55%" stop-color="#b9835a"/><stop offset="80%" stop-color="#8a5a34"/>' +
+        '<stop offset="100%" stop-color="#5c3a1c"/></linearGradient></defs>' +
+        '<path d="M44,96 C26,84 16,62 20,28 C21,16 28,8 33,12 C29,34 33,58 48,80 Z" fill="url(#' + bark + ')"/>' +
+        '<path d="M56,96 C74,84 84,62 80,28 C79,16 72,8 67,12 C71,34 67,58 52,80 Z" fill="url(#' + bark + ')"/>' +
+        '<path d="M40,180 C35,150 37,118 41,92 C43,82 57,82 59,92 C63,118 65,150 60,180 Z" fill="url(#' + bark + ')"/>' +
+        '<path d="M40,180 C31,171 22,169 15,176 C22,183 33,184 42,180 Z" fill="url(#' + bark + ')"/>' +
+        '<path d="M60,180 C69,171 78,169 85,176 C78,183 67,184 58,180 Z" fill="url(#' + bark + ')"/>' +
+        '<path d="M46,168 C44,146 45,124 48,100" stroke="rgba(0,0,0,.28)" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
+        '<path d="M54,168 C56,146 55,124 52,100" stroke="rgba(0,0,0,.28)" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
+        '</svg>';
+
+      var canopySvg =
+        '<svg viewBox="0 0 240 260" preserveAspectRatio="xMidYMid meet">' +
+        '<defs>' +
+        '<radialGradient id="' + cBack + '" cx="35%" cy="30%" r="75%"><stop offset="0%" stop-color="#2fa877"/><stop offset="100%" stop-color="#026b46"/></radialGradient>' +
+        '<radialGradient id="' + cMid + '" cx="35%" cy="30%" r="75%"><stop offset="0%" stop-color="#46cf92"/><stop offset="100%" stop-color="#029a63"/></radialGradient>' +
+        '<radialGradient id="' + cTop + '" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#82ecba"/><stop offset="100%" stop-color="#2fcf8f"/></radialGradient>' +
+        '</defs>' +
+        '<circle cx="32" cy="178" r="26" fill="url(#' + cMid + ')"/>' +
+        '<circle cx="206" cy="176" r="26" fill="url(#' + cMid + ')"/>' +
+        '<circle cx="58" cy="158" r="54" fill="url(#' + cMid + ')"/>' +
+        '<circle cx="182" cy="156" r="54" fill="url(#' + cMid + ')"/>' +
+        '<circle cx="120" cy="140" r="92" fill="url(#' + cBack + ')"/>' +
+        '<circle cx="120" cy="76" r="64" fill="url(#' + cTop + ')"/>' +
+        '</svg>';
+
+      treeEl.innerHTML =
+        '<div class="shadow"></div>' +
+        '<div class="grass grass1"></div><div class="grass grass2"></div><div class="grass grass3"></div>' +
+        '<div class="trunkwrap">' + trunkSvg + '</div>' +
+        '<div class="canopy">' + canopySvg + '</div>' +
+        '<div class="tree-label">' + (i+1) + '번째 나무 · ' + filled + '/' + cap + '</div>';
+
+      var canopy = treeEl.querySelector(".canopy");
+
+      var ribbonsForTree = ribbons.slice(cap * i, cap * i + filled);
+      ribbonsForTree.forEach(function(rb, j){
+        var pos = slotPosition(i, j);
+        var node = document.createElement("div");
+        node.className = "ribbon";
+        node.style.left = pos.left + "%";
+        node.style.top = pos.top + "%";
+        node.style.transform = "translate(-50%,-50%) rotate(" + pos.rot + "deg)";
+        node.title = rb.message;
+        node.innerHTML = RIBBON_ICON_SVG;
+        node.addEventListener("click", (function(rbb){
+          return function(){ openDetail(rbb); };
+        })(rb));
+        canopy.appendChild(node);
+      });
+
+      if (i === treesCount - 1){
+        for (var j2 = filled; j2 < cap; j2++){
+          var gpos = slotPosition(i, j2);
+          var ghost = document.createElement("div");
+          ghost.className = "ghost";
+          ghost.style.left = gpos.left + "%";
+          ghost.style.top = gpos.top + "%";
+          ghost.textContent = "+";
+          ghost.addEventListener("click", openForm);
+          canopy.appendChild(ghost);
+        }
+      }
+
+      els.forestWrap.appendChild(treeEl);
+    }
+
+    if (state.pendingActive){
+      var lastTree = els.forestWrap.lastChild;
+      if (lastTree){
+        var canopyLast = lastTree.querySelector(".canopy");
+        var filledLast = Math.max(0, Math.min(cap, ribbons.length - cap * (treesCount-1)));
+        var ppos = slotPosition(treesCount-1, filledLast);
+        var pend = document.createElement("div");
+        pend.className = "pending";
+        pend.style.left = ppos.left + "%";
+        pend.style.top = ppos.top + "%";
+        canopyLast.appendChild(pend);
+      }
+    }
+
+    var completeTrees = Math.floor(ribbons.length / cap);
+    var lastFilled = ribbons.length - completeTrees * cap;
+    els.statRibbons.textContent = ribbons.length;
+    els.statTrees.textContent = Math.max(1, treesCount);
+    els.statProgress.textContent = (ribbons.length === 0)
+      ? "0%"
+      : Math.round(((lastFilled === 0 ? cap : lastFilled) / cap) * 100) + "%";
+
+    els.forestTitle.textContent = ribbons.length === 0
+      ? "첫 리본을 기다리는 숲"
+      : "우리들의 숲 (" + ribbons.length + "개의 리본)";
+
+    els.modeBanner.style.display = isShared() ? "none" : "flex";
+  }
+
+  function openDetail(rb){
+    els.detailMsg.textContent = rb.message;
+    var d = new Date(rb.ts);
+    var dateStr = isNaN(d.getTime()) ? "" : (d.getMonth()+1) + "." + d.getDate();
+    els.detailMeta.textContent = (rb.name ? rb.name : "익명") + (dateStr ? " · " + dateStr : "");
+    openOverlay(els.detailOverlay);
+  }
+
+  // ---------- data flow ----------
+  function loadInitial(){
+    if (isShared()){
+      fetchRemote().then(function(list){
+        state.ribbons = list;
+        render();
+      }).catch(function(){
+        toast("동기화에 실패해 이 기기의 저장 내용을 표시합니다.");
+        state.ribbons = loadLocal();
+        render();
+      });
+    } else {
+      state.ribbons = loadLocal();
+      render();
+    }
+  }
+
+  function refreshRemote(showToastMsg){
+    if (!isShared()) return;
+    fetchRemote().then(function(list){
+      state.ribbons = list;
+      render();
+      if (showToastMsg) toast("새로고침했어요.");
+    }).catch(function(){
+      if (showToastMsg) toast("새로고침에 실패했어요. 잠시 후 다시 시도해주세요.");
+    });
+  }
+
+  setInterval(function(){ refreshRemote(false); }, CONFIG.POLL_MS);
+
+  // ---------- form ----------
+  function openForm(){ openOverlay(els.formOverlay); els.msgInput.focus(); }
+  els.addBtn.addEventListener("click", openForm);
+  els.formCancel.addEventListener("click", function(){ closeOverlay(els.formOverlay); });
+  els.msgInput.addEventListener("input", function(){
+    els.msgCount.textContent = els.msgInput.value.length;
+  });
+
+  els.ribbonForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var message = els.msgInput.value.trim();
+    var name = els.nameInput.value.trim();
+    if (!message) return;
+
+    var ribbon = { id: uid(), message: message, name: name, ts: Date.now() };
+
+    if (isShared()){
+      state.pendingActive = true;
+      render();
+      postRemote(ribbon).then(function(){
+        setTimeout(function(){
+          fetchRemote().then(function(list){
+            state.ribbons = list;
+          }).catch(function(){
+            // 서버에서 아직 못 읽어와도 임시로 보여준다
+            state.ribbons = state.ribbons.concat([ribbon]);
+          }).finally(function(){
+            state.pendingActive = false;
+            render();
+          });
+        }, 1300);
+      });
+    } else {
+      state.ribbons.push(ribbon);
+      saveLocal(state.ribbons);
+      render();
+    }
+
+    els.ribbonForm.reset();
+    els.msgCount.textContent = "0";
+    closeOverlay(els.formOverlay);
+    openOverlay(els.shareOverlay);
+  });
+
+  // finally polyfill for older Safari promise chains without native support isn't needed (modern browsers support it)
+
+  // ---------- detail ----------
+  els.detailClose.addEventListener("click", function(){ closeOverlay(els.detailOverlay); });
+
+  // ---------- share ----------
+  els.shareClose.addEventListener("click", function(){ closeOverlay(els.shareOverlay); });
+  els.shareBtn.addEventListener("click", function(){
+    var shareData = {
+      title: "마주해요 그린 리본 챌린지",
+      text: CONFIG.SLOGAN + " 너도 리본을 달아줄래?",
+      url: location.href
+    };
+    if (navigator.share){
+      navigator.share(shareData).catch(function(){});
+    } else if (navigator.clipboard){
+      navigator.clipboard.writeText(shareData.text + " " + shareData.url).then(function(){
+        toast("링크를 복사했어요. 다음 사람에게 공유해주세요!");
+      });
+    } else {
+      toast(shareData.url);
+    }
+    closeOverlay(els.shareOverlay);
+  });
+
+  // ---------- settings ----------
+  els.settingsBtn.addEventListener("click", function(){
+    els.apiUrlInput.value = state.apiUrl;
+    openOverlay(els.settingsOverlay);
+  });
+  els.bannerSettingsBtn.addEventListener("click", function(){
+    els.apiUrlInput.value = state.apiUrl;
+    openOverlay(els.settingsOverlay);
+  });
+  document.querySelectorAll(".overlay").forEach(function(ov){
+    ov.addEventListener("click", function(e){ if (e.target === ov) closeOverlay(ov); });
+  });
+
+  els.apiUrlSave.addEventListener("click", function(){
+    var v = els.apiUrlInput.value.trim();
+    if (!v){ toast("주소를 입력해주세요."); return; }
+    state.apiUrl = v;
+    localStorage.setItem(CONFIG.KEY_API, v);
+    toast("공유 모드로 전환했어요.");
+    closeOverlay(els.settingsOverlay);
+    loadInitial();
+  });
+  els.apiUrlClear.addEventListener("click", function(){
+    state.apiUrl = "";
+    // 빈 문자열로 명시 저장 (removeItem을 쓰면 다음 방문 때 기본 공유 주소로 되돌아가 버림)
+    localStorage.setItem(CONFIG.KEY_API, "");
+    toast("이 기기에만 저장하는 모드로 전환했어요.");
+    closeOverlay(els.settingsOverlay);
+    loadInitial();
+  });
+  els.copyCodeBtn.addEventListener("click", function(){
+    var text = els.scriptCode.textContent;
+    if (navigator.clipboard){
+      navigator.clipboard.writeText(text).then(function(){ toast("코드를 복사했어요."); });
+    }
+  });
+
+  // ---------- refresh / export ----------
+  els.refreshBtn.addEventListener("click", function(){
+    if (isShared()) refreshRemote(true);
+    else { state.ribbons = loadLocal(); render(); toast("새로고침했어요."); }
+  });
+
+  els.exportBtn.addEventListener("click", function(){
+    if (!window.html2canvas){ toast("이미지 저장 기능을 불러오지 못했어요."); return; }
+    toast("이미지를 만들고 있어요...");
+    html2canvas(document.querySelector(".hero")).then(function(canvas1){
+      html2canvas(document.getElementById("forestWrap")).then(function(canvas2){
+        var merged = document.createElement("canvas");
+        merged.width = Math.max(canvas1.width, canvas2.width);
+        merged.height = canvas1.height + canvas2.height;
+        var ctx = merged.getContext("2d");
+        ctx.fillStyle = "#F6FBF8";
+        ctx.fillRect(0,0,merged.width, merged.height);
+        ctx.drawImage(canvas1, 0, 0);
+        ctx.drawImage(canvas2, 0, canvas1.height);
+        var link = document.createElement("a");
+        link.download = "마주해요_그린리본_숲.png";
+        link.href = merged.toDataURL("image/png");
+        link.click();
+      });
+    });
+  });
+
+  // ---------- init ----------
+  loadInitial();
+})();
+</script>
+</body>
+</html>
